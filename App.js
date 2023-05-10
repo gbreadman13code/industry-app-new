@@ -1,20 +1,32 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { Provider, useDispatch } from "react-redux";
+import { store } from "./redux";
+import CheckAuth from "./components/screens/CheckAuth/CheckAuth";
+import { useEffect, useState } from "react";
+// import * as Font from "expo-font";
+import { useFonts } from "expo-font";
+import "react-native-gesture-handler";
+import { Linking } from "expo";
+import { View } from "react-native";
 
 export default function App() {
+  const [fontsLoaded] = useFonts({
+    "Geometria-Regular": require("./assets/fonts/geometria_medium.otf"),
+    "Geometria-Bold": require("./assets/fonts/geometria_bold.otf"),
+  });
+
+  if (!fontsLoaded) {
+    return null;
+  }
+
+  // useEffect(() => {
+  //   Font.loadAsync({
+  //     "Geometria-Regular": require("./assets/fonts/geometria_medium.otf"),
+  //     "Geometria-Bold": require("./assets/fonts/geometria_bold.otf"),
+  //   });
+  // }, []);
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <Provider store={store}>
+      <CheckAuth />
+    </Provider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
