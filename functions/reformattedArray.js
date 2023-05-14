@@ -54,6 +54,5 @@ export const reformattedEventsArray = (array) => {
       arrOfMonth.push(newObject);
     }
   });
-  console.log(arrOfMonth);
   return arrOfMonth;
 };

@@ -21,10 +21,13 @@ const styles = StyleSheet.create({
   button: {
     flexDirection: "row",
     alignItems: "center",
+    marginTop: 12,
     marginBottom: 18,
   },
   text: {
     color: "#464A88",
     marginLeft: 10,
+    fontSize: 20,
+    fontFamily: "Geometria-Bold",
   },
 });

@@ -41,7 +41,7 @@ const VideoList = () => {
     const filteredArray = await videoRedux.filter((item) =>
       item.title.toLowerCase().includes(title.toLowerCase())
     );
-    setArticles(reformattedArray(filteredArray));
+    setVideoList(reformattedArray(filteredArray));
   };
 
   const playAndPauseVideo = async (item, videoRef, setLoad) => {

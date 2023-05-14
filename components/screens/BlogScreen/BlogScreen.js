@@ -168,7 +168,8 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontFamily: "Geometria-Bold",
     textAlign: "center",
-    fontSize: 16,
+    fontSize: 20,
+    marginTop: 12,
     marginBottom: 15,
   },
   pageWrapper: {
@@ -187,5 +188,6 @@ const styles = StyleSheet.create({
   pageText: {
     color: "#fff",
     fontFamily: "Geometria-Bold",
+    fontSize: 16,
   },
 });

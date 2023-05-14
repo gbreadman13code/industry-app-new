@@ -18,7 +18,7 @@ const HomeSreenSmallItem = ({ item, color }) => {
         justifyContent: "flex-end",
       }}
     >
-      <View style={[styles.blackLine, { borderLeftColor: color }]}>
+      <View style={[styles.blackLine]}>
         <Text style={styles.blackLineText}>{item.text}</Text>
       </View>
     </ImageBackground>
@@ -32,11 +32,10 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(0, 0, 0, 0.6)",
     paddingVertical: 8,
     paddingHorizontal: 10,
-    borderLeftWidth: 5,
   },
   blackLineText: {
     color: "#fff",
     fontFamily: "Geometria-Regular",
-    fontSize: 20,
+    fontSize: 16,
   },
 });

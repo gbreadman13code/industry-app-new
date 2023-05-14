@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   FlatList,
   ImageBackground,
+  useWindowDimensions,
 } from "react-native";
 import React, { useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
@@ -103,6 +104,8 @@ const PartnersList = ({ navigation, route }) => {
     }, [])
   );
 
+  const { width } = useWindowDimensions();
+
   return isLoad ? (
     <SafeAreaView style={styles.container}>
       <View style={styles.wrapper}>
@@ -117,6 +120,7 @@ const PartnersList = ({ navigation, route }) => {
               position: "absolute",
               left: 0,
               top: 0,
+              marginTop: 12,
             }}
           >
             <Text
@@ -158,6 +162,7 @@ const PartnersList = ({ navigation, route }) => {
               position: "absolute",
               left: 0,
               top: 0,
+              marginTop: 12,
             }}
           >
             <Text
@@ -244,6 +249,7 @@ const PartnersList = ({ navigation, route }) => {
                 position: "absolute",
                 left: 0,
                 top: 0,
+                marginTop: 12,
               }}
             >
               <Text
@@ -339,9 +345,19 @@ const PartnersList = ({ navigation, route }) => {
                 >
                   <ImageBackground
                     source={{ uri: item.cropped_image }}
-                    style={{ width: 48, height: 48 }}
+                    style={{
+                      width: width * 0.16,
+                      height: width * 0.16,
+                      flex: 1,
+                    }}
                   ></ImageBackground>
-                  <View style={{ justifyContent: "center", minHeight: 48 }}>
+                  <View
+                    style={{
+                      justifyContent: "center",
+                      minHeight: 48,
+                      flex: 4,
+                    }}
+                  >
                     <Text
                       style={[
                         styles.title,
@@ -388,7 +404,8 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontFamily: "Geometria-Bold",
     textAlign: "center",
-    fontSize: 16,
+    marginTop: 12,
+    fontSize: 20,
   },
   sort: {
     flexDirection: "row",
@@ -399,6 +416,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     gap: 8,
     width: "85%",
+    marginBottom: 15,
   },
   title: {
     fontFamily: "Geometria-Bold",

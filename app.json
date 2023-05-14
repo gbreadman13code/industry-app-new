@@ -2,7 +2,7 @@
   "expo": {
     "name": "Индустрия",
     "slug": "industry-app",
-    "version": "1.1.9",
+    "version": "1.1.10",
     "orientation": "portrait",
     "icon": "./assets/playstore.png",
     "userInterfaceStyle": "light",
@@ -27,7 +27,7 @@
         "UIBackgroundModes": ["audio"]
       },
       "bundleIdentifier": "com.ITEO.industryApp",
-      "buildNumber": "1.1.9"
+      "buildNumber": "1.1.10"
     },
     "android": {
       "package": "com.ITEO.industryApp",

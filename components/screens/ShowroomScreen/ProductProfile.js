@@ -42,6 +42,7 @@ const ProductProfile = ({ navigation }) => {
   const [currentFullImage, setCurrentFullImage] = useState();
   const [isLoad, setLoad] = useState(false);
   const [inBasketYet, setInBasketYet] = useState(false);
+  const [isShowModal, setShowModal] = useState(true);
   const state = useNavigationState((state) => state.routes);
   const productRedux = useSelector((state) => state.products.current_product);
   const ordersRedux = useSelector((state) => state.bascket);
@@ -103,8 +104,6 @@ const ProductProfile = ({ navigation }) => {
     dispatch(getProductById(currentProductId, setLoad));
   }, [currentProductId]);
 
-  useEffect(() => {}, []);
-
   const likeOrUnlike = () => {
     if (product.is_liked) {
       dispatch(setUnlikeProduct(product.id));
@@ -144,6 +143,8 @@ const ProductProfile = ({ navigation }) => {
     </SafeAreaView>
   ) : (
     <SafeAreaView style={styles.container}>
+      {isShowModal && <View></View>}
+
       <View style={styles.wrapper}>
         <BackButton
           navigate={() => navigation.goBack()}
@@ -267,7 +268,7 @@ const ProductProfile = ({ navigation }) => {
                     </TouchableOpacity>
                   </View>
                 </View>
-                {product.description && product.description.includes("<p>") ? (
+                {product.description && product.description.includes("<p") ? (
                   <RenderHtml
                     contentWidth={width}
                     source={{ html: product.description }}
@@ -312,6 +313,7 @@ const description = StyleSheet.create({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    position: "relative",
     // marginBottom: 50,
   },
   description: {

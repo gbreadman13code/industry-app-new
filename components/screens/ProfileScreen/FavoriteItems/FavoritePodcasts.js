@@ -152,17 +152,21 @@ const FavoritePodcasts = ({ setPodcastsCount }) => {
       podcasts && podcasts.length > 0 ? podcasts.length * (50 + 8) : 20,
     ],
   });
-  return (
+  return podcasts && podcasts.length > 0 ? (
     <>
-      <View style={styles.pinkHeader_more}>
+      <TouchableOpacity
+        onPress={toggleList}
+        activeOpacity={0.6}
+        style={styles.pinkHeader_more}
+      >
         <Text style={styles.pinkText_more}>Подкасты</Text>
         <View style={styles.pinkDecor_more}></View>
-        <TouchableOpacity onPress={toggleList}>
+        <View>
           <Text style={styles.pinkText_more_end}>
             {expanded ? "Скрыть" : "Открыть"}
           </Text>
-        </TouchableOpacity>
-      </View>
+        </View>
+      </TouchableOpacity>
       <Animated.View style={{ height: height, overflow: "hidden" }}>
         {podcasts ? (
           podcasts.length < 1 ? (
@@ -190,7 +194,7 @@ const FavoritePodcasts = ({ setPodcastsCount }) => {
         ) : null}
       </Animated.View>
     </>
-  );
+  ) : null;
 };
 
 export default FavoritePodcasts;

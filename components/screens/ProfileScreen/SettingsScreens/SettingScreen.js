@@ -155,7 +155,8 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontFamily: "Geometria-Bold",
     textAlign: "center",
-    fontSize: 16,
+    marginTop: 12,
+    fontSize: 20,
     marginBottom: 20,
   },
   yellowHeader: {

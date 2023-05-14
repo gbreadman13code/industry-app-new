@@ -6,6 +6,8 @@ import {
   Text,
   View,
   Platform,
+  Keyboard,
+  useWindowDimensions,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import BackButton from "../../../elements/BackButton/BackButton";
@@ -36,6 +38,7 @@ const EditInfoScreen = ({ navigation }) => {
 
   const [infoErrors, setInfoErrors] = useState([]);
   const [passErrors, setPassErrors] = useState([]);
+  const [keyboardHeight, setKeyboardHeight] = useState(0);
 
   const [isPassSuccessChanged, setPassSuccessChanged] = useState(false);
 
@@ -110,9 +113,32 @@ const EditInfoScreen = ({ navigation }) => {
     );
   };
 
+  useEffect(() => {
+    const showSubscription = Keyboard.addListener("keyboardDidShow", (e) => {
+      setKeyboardHeight(e.endCoordinates.height);
+    });
+    const hideSubscription = Keyboard.addListener("keyboardDidHide", () => {
+      setKeyboardHeight(0);
+    });
+
+    return () => {
+      showSubscription.remove();
+      hideSubscription.remove();
+    };
+  }, []);
+
+  const { height } = useWindowDimensions();
+
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.wrapper}>
+    <SafeAreaView style={[styles.container]}>
+      <View
+        style={[
+          styles.wrapper,
+          {
+            maxHeight: height - keyboardHeight - 40,
+          },
+        ]}
+      >
         {isPassSuccessChanged && (
           <View style={styles.success_screen}>
             <Text style={styles.success_text}>Ваш пароль успешно изменен!</Text>
@@ -235,86 +261,86 @@ const EditInfoScreen = ({ navigation }) => {
             <Text style={styles.yellowText}>Пароль</Text>
             <View style={styles.yellowDecor}></View>
           </View>
-          <KeyboardAvoidingView
+          {/* <KeyboardAvoidingView
             // keyboardVerticalOffset={0}
             behavior={Platform.OS === "ios" ? "padding" : "height"}
-          >
-            <View style={{ marginTop: 16 }}>
+          > */}
+          <View style={{ marginTop: 16 }}>
+            <View style={{ marginBottom: 16 }}>
+              <CustomTextInput
+                editable={!isLoadPass}
+                value={currentPass}
+                onChangeText={setCurrentPass}
+                password={true}
+                placeholder={"Текущий пароль"}
+              />
+            </View>
+            <View style={{ marginBottom: 16 }}>
+              <CustomTextInput
+                editable={!isLoadPass}
+                value={newPass}
+                onChangeText={setNewPassword}
+                password={true}
+                placeholder={"Новый пароль"}
+              />
+            </View>
+            <View style={{ marginBottom: 16 }}>
+              <CustomTextInput
+                editable={!isLoadPass}
+                value={confirmNewPass}
+                onChangeText={setConfirmNewPass}
+                password={true}
+                placeholder={"Повторите пароль"}
+              />
+            </View>
+            {passErrors.length > 0 && (
               <View style={{ marginBottom: 16 }}>
-                <CustomTextInput
-                  editable={!isLoadPass}
-                  value={currentPass}
-                  onChangeText={setCurrentPass}
-                  password={true}
-                  placeholder={"Текущий пароль"}
-                />
-              </View>
-              <View style={{ marginBottom: 16 }}>
-                <CustomTextInput
-                  editable={!isLoadPass}
-                  value={newPass}
-                  onChangeText={setNewPassword}
-                  password={true}
-                  placeholder={"Новый пароль"}
-                />
-              </View>
-              <View style={{ marginBottom: 16 }}>
-                <CustomTextInput
-                  editable={!isLoadPass}
-                  value={confirmNewPass}
-                  onChangeText={setConfirmNewPass}
-                  password={true}
-                  placeholder={"Повторите пароль"}
-                />
-              </View>
-              {passErrors.length > 0 && (
-                <View style={{ marginBottom: 16 }}>
-                  {passErrors.map((item, index) => (
-                    <Text
-                      key={index}
-                      style={{
-                        color: "#B34382",
-                        fontSize: 12,
-                        marginBottom: 7,
-                      }}
-                    >
-                      {item}
-                    </Text>
-                  ))}
-                </View>
-              )}
-
-              <View style={{ marginBottom: 16 }}>
-                <CustomButton
-                  onClick={changePassword}
-                  disactive={
-                    !currentPass ||
-                    !newPass ||
-                    !confirmNewPass ||
-                    isLoadPass ||
-                    passErrors.length > 0
-                  }
-                >
+                {passErrors.map((item, index) => (
                   <Text
+                    key={index}
                     style={{
-                      fontFamily: "Geometria-Regular",
-                      fontSize: 16,
-                      color:
-                        !currentPass ||
-                        !newPass ||
-                        !confirmNewPass ||
-                        isLoadPass ||
-                        passErrors.length > 0
-                          ? "#43464A"
-                          : "#000",
+                      color: "#B34382",
+                      fontSize: 12,
+                      marginBottom: 7,
                     }}
                   >
-                    Сохранить
+                    {item}
                   </Text>
-                </CustomButton>
+                ))}
               </View>
+            )}
+
+            <View style={{ marginBottom: 16 }}>
+              <CustomButton
+                onClick={changePassword}
+                disactive={
+                  !currentPass ||
+                  !newPass ||
+                  !confirmNewPass ||
+                  isLoadPass ||
+                  passErrors.length > 0
+                }
+              >
+                <Text
+                  style={{
+                    fontFamily: "Geometria-Regular",
+                    fontSize: 16,
+                    color:
+                      !currentPass ||
+                      !newPass ||
+                      !confirmNewPass ||
+                      isLoadPass ||
+                      passErrors.length > 0
+                        ? "#43464A"
+                        : "#000",
+                  }}
+                >
+                  Сохранить
+                </Text>
+              </CustomButton>
             </View>
-          </KeyboardAvoidingView>
+          </View>
+          {/* </KeyboardAvoidingView> */}
         </ScrollView>
       </View>
     </SafeAreaView>
@@ -326,6 +352,7 @@ export default EditInfoScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "#000",
   },
   lottieContainer: {
     width: "100%",
@@ -335,7 +362,7 @@ const styles = StyleSheet.create({
   },
   wrapper: {
     flex: 1,
-    height: "100%",
+    // height: "100%",
     backgroundColor: "#000",
     paddingHorizontal: 10,
     position: "relative",
@@ -371,7 +398,8 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontFamily: "Geometria-Bold",
     textAlign: "center",
-    fontSize: 16,
+    marginTop: 12,
+    fontSize: 20,
     marginBottom: 20,
   },
   yellowHeader: {

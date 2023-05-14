@@ -53,74 +53,85 @@ const HomeScreen = ({ navigation }) => {
             <NotificationIcon />
           </View> */}
         </View>
-        <ScrollView>
-          {items.places && (
-            <TouchableOpacity onPress={() => navigateTo("Events")}>
-              <ImageBackground
-                source={{ uri: items.places.file }}
-                style={{
-                  width: width - 20,
-                  height: (width - 20) * 0.46,
-                  justifyContent: "flex-end",
-                }}
-              >
-                <View
-                  style={[styles.blackLine, { borderLeftColor: "#55A290" }]}
-                >
-                  <Text style={styles.blackLineText}>{items.places.text}</Text>
-                </View>
-              </ImageBackground>
-            </TouchableOpacity>
-          )}
-          <View
-            style={{
-              flexDirection: "row",
-              flexWrap: "wrap",
-              gap: 10,
-              marginTop: 10,
-            }}
+        <View>
+          <ScrollView
+            contentContainerStyle={
+              {
+                // flex: 1,
+              }
+            }
           >
-            {items.showroom && (
-              <TouchableOpacity onPress={() => navigateTo("Шоурум")}>
-                <HomeSreenSmallItem item={items.showroom} color={"#B34382"} />
+            {items.places && (
+              <TouchableOpacity onPress={() => navigateTo("Events")}>
+                <ImageBackground
+                  source={{ uri: items.places.file }}
+                  style={{
+                    width: width - 20,
+                    height: (width - 20) * 0.46,
+                    justifyContent: "flex-end",
+                  }}
+                >
+                  <View style={[styles.blackLine]}>
+                    <Text style={styles.blackLineText}>
+                      {items.places.text}
+                    </Text>
+                  </View>
+                </ImageBackground>
               </TouchableOpacity>
             )}
-            {items.watching && (
-              <TouchableOpacity
-                onPress={() => {
-                  dispatch(setNewMeiaRouterAction("videos"));
-                  navigateTo("Медиа");
-                }}
-              >
-                <HomeSreenSmallItem item={items.watching} color={"#E7E453"} />
-              </TouchableOpacity>
-            )}
-            {items.listening && (
-              <TouchableOpacity
-                onPress={() => {
-                  dispatch(setNewMeiaRouterAction("podcasts"));
-                  navigateTo("Медиа");
-                }}
-              >
-                <HomeSreenSmallItem item={items.listening} color={"#464A88"} />
-              </TouchableOpacity>
-            )}
-            {items.eating && (
-              <TouchableOpacity
-                onPress={() => {
-                  dispatch(
-                    setGastronomyIdAction(
-                      items.eating.eating_partner_category_id
-                    )
-                  );
-                  navigateTo("Партнеры");
-                }}
-              >
-                <HomeSreenSmallItem item={items.eating} color={"#55A290"} />
-              </TouchableOpacity>
-            )}
-          </View>
-        </ScrollView>
+            <View
+              style={{
+                flexDirection: "row",
+                flexWrap: "wrap",
+                gap: 10,
+                marginTop: 10,
+              }}
+            >
+              {items.showroom && (
+                <TouchableOpacity onPress={() => navigateTo("Шоурум")}>
+                  <HomeSreenSmallItem item={items.showroom} color={"#B34382"} />
+                </TouchableOpacity>
+              )}
+              {items.watching && (
+                <TouchableOpacity
+                  onPress={() => {
+                    dispatch(setNewMeiaRouterAction("videos"));
+                    navigateTo("Медиа");
+                  }}
+                >
+                  <HomeSreenSmallItem item={items.watching} color={"#E7E453"} />
+                </TouchableOpacity>
+              )}
+              {items.listening && (
+                <TouchableOpacity
+                  onPress={() => {
+                    dispatch(setNewMeiaRouterAction("podcasts"));
+                    navigateTo("Медиа");
+                  }}
+                >
+                  <HomeSreenSmallItem
+                    item={items.listening}
+                    color={"#464A88"}
+                  />
+                </TouchableOpacity>
+              )}
+              {items.eating && (
+                <TouchableOpacity
+                  onPress={() => {
+                    dispatch(
+                      setGastronomyIdAction(
+                        items.eating.eating_partner_category_id
+                      )
+                    );
+                    navigateTo("Партнеры");
+                  }}
+                >
+                  <HomeSreenSmallItem item={items.eating} color={"#55A290"} />
+                </TouchableOpacity>
+              )}
+            </View>
+          </ScrollView>
+        </View>
       </View>
     </SafeAreaView>
   );
@@ -131,12 +142,14 @@ export default HomeScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "#000",
+    // justifyContent: "center",
   },
   wrapper: {
     flex: 1,
     height: "100%",
-    backgroundColor: "#000",
     paddingHorizontal: 10,
+    justifyContent: "center",
   },
   headerWrap: {
     flexDirection: "row",
@@ -144,7 +157,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     width: "100%",
     position: "relative",
-    marginBottom: 40,
+    paddingBottom: 40,
+    transform: "scale(1.4)",
   },
   header: {
     color: "#fff",
@@ -162,11 +176,10 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(0, 0, 0, 0.6)",
     paddingVertical: 8,
     paddingHorizontal: 10,
-    borderLeftWidth: 5,
   },
   blackLineText: {
     color: "#fff",
     fontFamily: "Geometria-Regular",
-    fontSize: 20,
+    fontSize: 16,
   },
 });

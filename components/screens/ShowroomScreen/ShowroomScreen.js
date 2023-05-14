@@ -5,17 +5,19 @@ import {
   SafeAreaView,
   TouchableOpacity,
   FlatList,
+  ScrollView,
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getCategories } from "../../../queries/getCategories";
 // import SvgUri from "react-native-svg-uri";
 import Lottie from "lottie-react-native";
 
-import { getProducts } from "../../../queries/getProducts";
+import { getNextProducts, getProducts } from "../../../queries/getProducts";
 import ProductCard from "./ProductCard";
 import SortArrowUp from "../../../assets/svg/SortArrowUp";
 import SortArrowDown from "../../../assets/svg/SortArrowDown";
+import { useFocusEffect } from "@react-navigation/native";
 
 const ShowroomScreen = ({ navigation }) => {
   const [categories, setCategories] = useState();
@@ -26,8 +28,10 @@ const ShowroomScreen = ({ navigation }) => {
   const [activeCategories, setActiveCategories] = useState([]);
   const [isLoad, setLoad] = useState(false);
   const [isLoadProducts, setLoadProducts] = useState(false);
+  const [isLoadNextProducts, setLoadNextProducts] = useState(false);
   const categoriesRedux = useSelector((state) => state.categories.categories);
   const productsRedux = useSelector((state) => state.products.products);
+  const nextRedux = useSelector((state) => state.products.next);
   const dispatch = useDispatch();
 
   const sortingByPrice = () => {
@@ -71,6 +75,7 @@ const ShowroomScreen = ({ navigation }) => {
       );
     }
     const sort_parametres = sort_parametres_array.join("&");
+
     dispatch(getProducts(sort_parametres, setLoad, setLoadProducts));
   }, [dispatch, activeCategories, sortToDown, sortToUp]);
 
@@ -88,6 +93,14 @@ const ShowroomScreen = ({ navigation }) => {
     setLoad(true);
     dispatch(getCategories());
   }, [dispatch]);
+
+  const loadNextProducts = () => {
+    if (!nextRedux) return;
+    setLoadNextProducts(true);
+    dispatch(
+      getNextProducts(nextRedux, setLoad, setLoadProducts, setLoadNextProducts)
+    );
+  };
 
   return isLoad ? (
     <SafeAreaView style={styles.container}>
@@ -110,7 +123,7 @@ const ShowroomScreen = ({ navigation }) => {
         <View style={styles.headerWrap}>
           <TouchableOpacity
             activeOpacity={1}
-            onPress={sortingByPrice}
+            onPress={!isLoad && !isLoadProducts ? sortingByPrice : null}
             style={{
               flexDirection: "row",
               alignItems: "center",
@@ -146,7 +159,9 @@ const ShowroomScreen = ({ navigation }) => {
                     borderWidth: 1,
                     padding: 4,
                   }}
-                  onPress={() => categoryClickHandler(item.id)}
+                  onPress={() =>
+                    !isLoadProducts ? categoryClickHandler(item.id) : null
+                  }
                 >
                   <Text
                     style={{
@@ -216,7 +231,7 @@ const ShowroomScreen = ({ navigation }) => {
         <View style={styles.headerWrap}>
           <TouchableOpacity
             activeOpacity={1}
-            onPress={sortingByPrice}
+            onPress={!isLoad && !isLoadProducts ? sortingByPrice : null}
             style={{
               flexDirection: "row",
               alignItems: "center",
@@ -306,34 +321,52 @@ const ShowroomScreen = ({ navigation }) => {
           </View>
         )}
         {products && (
-          <FlatList
-            data={products}
-            // keyExtractor={item.id}
-            numColumns={2}
-            initialNumToRender={10}
-            columnWrapperStyle={{ maxWidth: "100%" }}
-            windowSize={5}
-            renderItem={({ item, index }) => (
-              <ProductCard
-                item={item}
-                key={item.id}
-                id={item.id}
-                index={index}
-                navigation={navigateToProfile}
-                shop={item.shop.title}
-                category={
-                  categories &&
-                  categories.filter(
-                    (category) => category.id === item.shop.category
-                  )
-                }
-                price={item.price}
-                old_price={item.old_price}
-                imgUrl={item.cropped_image}
-                title={item.title}
-              />
-            )}
-          />
+          <>
+            <FlatList
+              data={products}
+              keyExtractor={() => Date.now() + Math.random()}
+              numColumns={2}
+              initialNumToRender={10}
+              maxToRenderPerBatch={30}
+              onEndReachedThreshold={90}
+              ListFooterComponent={
+                <Text
+                  style={{
+                    color: "#fff",
+                    fontFamily: "Geometria-Bold",
+                    textAlign: "center",
+                    marginVertical: isLoadNextProducts ? 100 : 0,
+                  }}
+                >
+                  {isLoadNextProducts && "Загрузка..."}
+                </Text>
+              }
+              onEndReached={(e) =>
+                e.distanceFromEnd < 1000 && loadNextProducts()
+              }
+              columnWrapperStyle={{ maxWidth: "100%" }}
+              windowSize={5}
+              renderItem={({ item, index }) => (
+                <ProductCard
+                  item={item}
+                  id={item.id}
+                  index={index}
+                  navigation={navigateToProfile}
+                  shop={item.shop.title}
+                  category={
+                    categories &&
+                    categories.filter(
+                      (category) => category.id === item.shop.category
+                    )
+                  }
+                  price={item.price}
+                  old_price={item.old_price}
+                  imgUrl={item.cropped_image}
+                  title={item.title}
+                />
+              )}
+            />
+          </>
         )}
       </View>
     </SafeAreaView>
@@ -369,12 +402,13 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     position: "relative",
     marginBottom: 15,
+    marginTop: 12,
   },
   header: {
     color: "#fff",
     fontFamily: "Geometria-Bold",
     textAlign: "center",
-    fontSize: 16,
+    fontSize: 20,
   },
   sort: {
     flexDirection: "row",

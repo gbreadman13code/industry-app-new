@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   FlatList,
   ScrollView,
+  Linking,
 } from "react-native";
 import {
   BottomSheetModal,
@@ -30,6 +31,8 @@ import VkSvg from "../../../assets/svg/VkSvg";
 import TgSvg from "../../../assets/svg/TgSvg";
 import ProductCard from "./ProductCard";
 import ModalBackdrop from "../../elements/ModalBackdrop/ModalBackdrop";
+import QuestionIcon from "../../../assets/svg/QuestionIcon";
+import GlobeSite from "../../../assets/svg/GlobeSite";
 
 const SellerProfile = ({ navigation }) => {
   const [currentShopId, setCurrentShopId] = useState();
@@ -49,6 +52,10 @@ const SellerProfile = ({ navigation }) => {
   }, [categoriesRedux]);
 
   const dispatch = useDispatch();
+
+  const linkToUrl = (url) => {
+    Linking.openURL(url);
+  };
 
   useEffect(() => {
     setLoad(true);
@@ -84,12 +91,22 @@ const SellerProfile = ({ navigation }) => {
     setModalShowing(true);
   };
 
+  const handleCloseModal = () => {
+    bottomSheetModalRef.current?.dismiss();
+    setModalShowing(false);
+  };
+
   return (
     <BottomSheetModalProvider>
       <SafeAreaView style={styles.container}>
         <View style={styles.wrapper}>
-          <ScrollView>
-            {isModalShowing && <View style={styles.blackBackdrop}></View>}
+          <ScrollView nestedScrollEnabled={true}>
+            {isModalShowing && (
+              <TouchableOpacity
+                onPress={handleCloseModal}
+                style={styles.blackBackdrop}
+              ></TouchableOpacity>
+            )}
 
             <View style={styles.headerWrap}>
               <View style={styles.backButtonWrapper}>
@@ -126,8 +143,14 @@ const SellerProfile = ({ navigation }) => {
                       style={styles.subscribeButtonFAQ}
                       onPress={handleSnapPress}
                     >
-                      <Text style={styles.subscribeButtonFAQText}>?</Text>
+                      <QuestionIcon />
                     </TouchableOpacity>
+                    {/* <TouchableOpacity
+                      style={styles.subscribeButtonFAQ}
+                      onPress={handleSnapPress}
+                    >
+                      <Text style={styles.subscribeButtonFAQText}>?</Text>
+                    </TouchableOpacity> */}
                   </View>
                   <Text style={styles.title}>{shop.title}</Text>
                   {shop.address && (
@@ -138,10 +161,29 @@ const SellerProfile = ({ navigation }) => {
                     {/* <ShareSvg /> */}
                     {(shop.cite_link || shop.tg_link || shop.vk_link) && (
                       <View style={styles.socials}>
-                        <View style={{ marginRight: 20 }}>
-                          <VkSvg />
-                        </View>
-                        <TgSvg />
+                        {shop.vk_link && (
+                          <TouchableOpacity
+                            onPress={() => linkToUrl(shop.vk_link)}
+                          >
+                            <VkSvg />
+                          </TouchableOpacity>
+                        )}
+                        {shop.tg_link && (
+                          <TouchableOpacity
+                            style={{ marginLeft: 20 }}
+                            onPress={() => linkToUrl(shop.tg_link)}
+                          >
+                            <TgSvg />
+                          </TouchableOpacity>
+                        )}
+                        {shop.cite_link && (
+                          <TouchableOpacity
+                            style={{ marginLeft: 20 }}
+                            onPress={() => linkToUrl(shop.cite_link)}
+                          >
+                            <GlobeSite />
+                          </TouchableOpacity>
+                        )}
                       </View>
                     )}
                   </View>
@@ -158,6 +200,7 @@ const SellerProfile = ({ navigation }) => {
                       //   keyExtractor={item.id}
                       numColumns={2}
                       initialNumToRender={10}
+                      maxToRenderPerBatch={10}
                       columnWrapperStyle={{ maxWidth: "100%" }}
                       windowSize={5}
                       renderItem={({ item, index }) => (
@@ -306,7 +349,8 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontFamily: "Geometria-Bold",
     textAlign: "center",
-    fontSize: 16,
+    fontSize: 20,
+    marginTop: 12,
     marginBottom: 15,
   },
 
@@ -348,18 +392,8 @@ const styles = StyleSheet.create({
     fontFamily: "Geometria-Regular",
   },
   subscribeButtonFAQ: {
-    borderWidth: 1,
-    borderColor: "#C7CBC9",
-    borderRadius: 50,
-    width: 18,
-    height: 18,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  subscribeButtonFAQText: {
-    color: "#C7CBC9",
-    fontFamily: "Geometria-Regular",
-    fontSize: 14,
+    width: 20,
+    height: 19,
   },
   iconsBlock: {
     width: "100%",

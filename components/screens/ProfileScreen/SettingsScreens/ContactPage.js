@@ -22,7 +22,8 @@ const ContactPage = ({ navigation }) => {
   const contactsRedux = useSelector((state) => state.contacts.contacts);
 
   const linkToCall = (number) => {
-    Linking.openURL(`tel:${number}`);
+    const string = number.split(" ").join("");
+    Linking.openURL(`tel:${string}`);
   };
 
   const linkToMail = (e_mail) => {
@@ -34,6 +35,10 @@ const ContactPage = ({ navigation }) => {
   };
 
   const linkToSocial = (link) => {
+    Linking.openURL(link);
+  };
+
+  const linkToDoc = (link) => {
     Linking.openURL(link);
   };
 
@@ -192,14 +197,32 @@ const ContactPage = ({ navigation }) => {
                 </View>
               )}
               <View style={styles.contactItem}>
-                <View style={[styles.contactContent, { marginBottom: 20 }]}>
-                  <View style={{ marginRight: 20 }}>
-                    <AgreementLinePink />
-                  </View>
-                  <Text style={styles.contactContentText}>
-                    Пользовательское соглашение
-                  </Text>
-                </View>
+                {contacts.user_agreement && (
+                  <TouchableOpacity
+                    onPress={() => linkToDoc(contacts.user_agreement)}
+                    style={[styles.contactContent, { marginBottom: 20 }]}
+                  >
+                    <View style={{ marginRight: 20 }}>
+                      <AgreementLinePink />
+                    </View>
+                    <Text style={styles.contactContentText}>
+                      Пользовательское соглашение
+                    </Text>
+                  </TouchableOpacity>
+                )}
+                {contacts.confidential_policy && (
+                  <TouchableOpacity
+                    onPress={() => linkToDoc(contacts.confidential_policy)}
+                    style={[styles.contactContent, { marginBottom: 20 }]}
+                  >
+                    <View style={{ marginRight: 20 }}>
+                      <AgreementLinePink />
+                    </View>
+                    <Text style={styles.contactContentText}>
+                      Политика конфиденциальности
+                    </Text>
+                  </TouchableOpacity>
+                )}
                 {contacts.ogrn && (
                   <View style={[styles.contactContent, { marginBottom: 10 }]}>
                     <View>

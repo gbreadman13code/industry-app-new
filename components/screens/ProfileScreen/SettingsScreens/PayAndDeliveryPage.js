@@ -1,4 +1,4 @@
-import { SafeAreaView, StyleSheet, Text, View } from "react-native";
+import { Image, SafeAreaView, StyleSheet, Text, View } from "react-native";
 import React, { useEffect, useState } from "react";
 import { TouchableOpacity } from "react-native";
 import ArrowBack from "../../../../assets/svg/ArrowBack";
@@ -75,16 +75,22 @@ const PayAndDeliveryPage = ({ navigation }) => {
           </Text>
           <View style={{ flexDirection: "row", marginTop: 43 }}>
             <View style={{ marginRight: 10 }}>
-              <VisaCard />
+              <Image
+                source={require("../../../../assets/img/icons/visa.png")}
+              />
             </View>
             <View style={{ marginRight: 10 }}>
-              <MaestroCard />
+              <Image
+                source={require("../../../../assets/img/icons/maestro.png")}
+              />
             </View>
             <View style={{ marginRight: 10 }}>
-              <MasterCard />
+              <Image
+                source={require("../../../../assets/img/icons/mastercard.png")}
+              />
             </View>
             <View style={{ marginRight: 0 }}>
-              <MirCard />
+              <Image source={require("../../../../assets/img/icons/mir.png")} />
             </View>
           </View>
         </View>

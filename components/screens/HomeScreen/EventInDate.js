@@ -1,4 +1,10 @@
-import { StyleSheet, Text, View, useWindowDimensions } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  useWindowDimensions,
+  Linking,
+} from "react-native";
 import React, { useEffect, useMemo, useState } from "react";
 import RenderHtml from "react-native-render-html";
 import Constants from "expo-constants";
@@ -61,14 +67,14 @@ const EventInDate = ({ point }) => {
         borderLeftWidth: 1,
         borderLeftColor: "#fff",
         paddingLeft: 8,
-        marginBottom: 8,
+        marginBottom: 30,
         alignItems: "flex-start",
       }}
     >
       <Text style={[styles.event_title, { color: color }]}>
         {point.event_title}
       </Text>
-      {point.text.includes("<p>") ? (
+      {point.text.includes("<p") ? (
         <RenderHtml
           contentWidth={width}
           source={{ html: point.text }}
@@ -93,27 +99,33 @@ const EventInDate = ({ point }) => {
         </Text>
         <Text style={styles.location}>{point.event_location_start}</Text>
       </View>
-      <View style={point.link_title ? { marginBottom: 10 } : {}}>
-        <Text style={[styles.path_title, { color: color, borderColor: color }]}>
-          {point.path_title}
-        </Text>
+      <View
+        style={{ flexDirection: "row", alignItems: "center", marginTop: 10 }}
+      >
+        <View style={point.link_title ? { marginRight: 10 } : {}}>
+          <Text
+            style={[styles.path_title, { color: color, borderColor: color }]}
+          >
+            {point.path_title}
+          </Text>
+        </View>
+        {point.link_title && (
+          <CustomButton
+            paddingVertical={4}
+            paddingHorizontal={4}
+            onClick={() => point.link && linkToSite(point.link)}
+            backgroundColor={color}
+            borderColor={color}
+          >
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+              {point.link && <LinkIcon />}
+              <Text style={{ marginLeft: 4, fontFamily: "Geometria-Regular" }}>
+                {point.link_title}
+              </Text>
+            </View>
+          </CustomButton>
+        )}
       </View>
-      {point.link_title && (
-        <CustomButton
-          paddingVertical={4}
-          paddingHorizontal={4}
-          onClick={() => linkToSite(point.link)}
-          backgroundColor={color}
-          borderColor={color}
-        >
-          <View style={{ flexDirection: "row", alignItems: "center" }}>
-            <LinkIcon />
-            <Text style={{ marginLeft: 4, fontFamily: "Geometria-Regular" }}>
-              {point.link_title}
-            </Text>
-          </View>
-        </CustomButton>
-      )}
     </View>
   );
 };
@@ -156,6 +168,5 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     paddingVertical: 5,
     paddingHorizontal: 8,
-    marginTop: 10,
   },
 });

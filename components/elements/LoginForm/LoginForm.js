@@ -21,9 +21,9 @@ const LoginForm = ({ setGlobalLoad }) => {
 
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    setGlobalLoad(isLoad);
-  }, [isLoad]);
+  // useEffect(() => {
+  //   setGlobalLoad(isLoad);
+  // }, [isLoad]);
 
   const sendLoginData = () => {
     setErrorList([]);
@@ -37,7 +37,11 @@ const LoginForm = ({ setGlobalLoad }) => {
       return;
     }
     dispatch(
-      login({ email: email, password: password }, setLoad, setErrorList)
+      login(
+        { email: email.toLowerCase(), password: password },
+        setLoad,
+        setErrorList
+      )
     );
   };
 
@@ -63,7 +67,7 @@ const LoginForm = ({ setGlobalLoad }) => {
               editable={!isLoad}
               placeholder={"Электронная почта"}
               value={email}
-              onChangeText={(text) => setEmail(text.toLowerCase())}
+              onChangeText={(text) => setEmail(text)}
             />
           </View>
           <CustomTextInput

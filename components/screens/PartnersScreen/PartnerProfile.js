@@ -10,6 +10,8 @@ import {
   LogBox,
   useWindowDimensions,
   Platform,
+  Appearance,
+  Linking,
 } from "react-native";
 import Lottie from "lottie-react-native";
 
@@ -33,7 +35,8 @@ import {
   BottomSheetScrollView,
 } from "@gorhom/bottom-sheet";
 import QuestionIcon from "../../../assets/svg/QuestionIcon";
-import { PromotionWithNumber } from "./Promotions";
+import { PromotionWithNumber, PromotionWithOuthNumber } from "./Promotions";
+import GlobeSite from "../../../assets/svg/GlobeSite";
 
 const PartnerProfile = ({ navigation }) => {
   const [partner, setPartner] = useState();
@@ -53,7 +56,6 @@ const PartnerProfile = ({ navigation }) => {
   useEffect(() => {
     if (!partnerRedux) return;
     setPartner(partnerRedux);
-    console.log(partnerRedux);
   }, [partnerRedux]);
 
   useEffect(() => {
@@ -62,6 +64,10 @@ const PartnerProfile = ({ navigation }) => {
       state.find((item) => item.name === "Partner").params.id
     );
   }, [state]);
+
+  const linkToUrl = (url) => {
+    Linking.openURL(url);
+  };
 
   useEffect(() => {
     if (!currentPartnerId) return;
@@ -87,6 +93,12 @@ const PartnerProfile = ({ navigation }) => {
   const handleSnapPressInfo = () => {
     bottomSheetModalInfoRef.current?.present();
     setModalShowing(true);
+  };
+
+  handleCloseModal = () => {
+    bottomSheetModalInfoRef.current?.dismiss();
+    bottomSheetModalRef.current?.dismiss();
+    setModalShowing(false);
   };
 
   const { width } = useWindowDimensions();
@@ -127,7 +139,13 @@ const PartnerProfile = ({ navigation }) => {
           callback={() => dispatch(setCurrentPartnerAction(false))}
         />
         <View style={styles.wrapper}>
-          {isModalShowing && <View style={styles.blackBackdrop}></View>}
+          {isModalShowing && (
+            <TouchableOpacity
+              style={styles.blackBackdrop}
+              onPress={handleCloseModal}
+              activeOpacity={1}
+            ></TouchableOpacity>
+          )}
 
           {partner && (
             <ScrollView>
@@ -137,7 +155,7 @@ const PartnerProfile = ({ navigation }) => {
                     style={styles.moreInfoButton}
                     onPress={handleSnapPressInfo}
                   >
-                    <Text style={styles.moreInfoButtonText}>Подробнее</Text>
+                    <Text style={[styles.moreInfoButtonText]}>Подробнее</Text>
                   </TouchableOpacity>
                   <ImageBackground
                     style={{
@@ -152,12 +170,14 @@ const PartnerProfile = ({ navigation }) => {
                     }}
                     source={{ uri: partner.cropped_image }}
                   />
-                  <View style={{ flexDirection: "row", alignItems: "center" }}>
+                  <View
+                    style={{ flexDirection: "column", alignItems: "flex-end" }}
+                  >
                     <TouchableOpacity
                       style={styles.subscribeButton}
                       onPress={likeOrUnlike}
                     >
-                      <Text style={styles.subscribeButtonText}>
+                      <Text style={[styles.subscribeButtonText]}>
                         {partner.is_liked ? "Отписаться" : "Подписаться"}
                       </Text>
                     </TouchableOpacity>
@@ -180,10 +200,29 @@ const PartnerProfile = ({ navigation }) => {
                     partner.tg_link ||
                     partner.vk_link) && (
                     <View style={styles.socials}>
-                      <View style={{ marginRight: 20 }}>
-                        <VkSvg />
-                      </View>
-                      <TgSvg />
+                      {partner.vk_link && (
+                        <TouchableOpacity
+                          onPress={() => linkToUrl(partner.vk_link)}
+                        >
+                          <VkSvg />
+                        </TouchableOpacity>
+                      )}
+                      {partner.tg_link && (
+                        <TouchableOpacity
+                          style={{ marginLeft: 20 }}
+                          onPress={() => linkToUrl(partner.tg_link)}
+                        >
+                          <TgSvg />
+                        </TouchableOpacity>
+                      )}
+                      {partner.site_link && (
+                        <TouchableOpacity
+                          style={{ marginLeft: 20 }}
+                          onPress={() => linkToUrl(partner.site_link)}
+                        >
+                          <GlobeSite />
+                        </TouchableOpacity>
+                      )}
                     </View>
                   )}
                 </View>
@@ -224,11 +263,12 @@ const PartnerProfile = ({ navigation }) => {
                     </Text>
                     <View style={styles.yellowDecor}></View>
                   </View>
-                  {partner.additional_promotions.map(
-                    (item, index) =>
-                      item.sale && (
-                        <PromotionWithNumber key={index} item={item} />
-                      )
+                  {partner.additional_promotions.map((item, index) =>
+                    item.sale ? (
+                      <PromotionWithNumber key={index} item={item} />
+                    ) : (
+                      <PromotionWithOuthNumber key={index} item={item} />
+                    )
                   )}
                 </>
               )}
@@ -364,6 +404,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontFamily: "Geometria-Bold",
     marginBottom: 16,
+    flex: 1,
   },
   modalTextTitle: {
     color: "#464A88",
@@ -426,17 +467,18 @@ const styles = StyleSheet.create({
     position: "relative",
     justifyContent: "space-between",
     flexDirection: "row",
-    alignItems: "center",
+    alignItems: "flex-start",
   },
   moreInfoButton: {
-    backgroundColor: "transparent",
+    backgroundColor: "#464A88",
+
     borderWidth: 1,
-    borderColor: "#E7E453",
+    borderColor: "#464A88",
     padding: 5,
     marginRight: 7,
   },
   moreInfoButtonText: {
-    color: "#E7E453",
+    color: "#fff",
     fontSize: 15,
     fontFamily: "Geometria-Regular",
   },
@@ -445,7 +487,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#464A88",
     padding: 5,
-    marginRight: 7,
+    marginBottom: 10,
   },
   subscribeButtonText: {
     color: "#fff",

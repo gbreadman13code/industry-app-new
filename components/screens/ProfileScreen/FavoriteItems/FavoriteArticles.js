@@ -50,17 +50,21 @@ const FavoriteArticles = ({ navigation, setArticlesCount }) => {
       return async () => {};
     }, [])
   );
-  return (
+  return articles && articles.length > 0 ? (
     <>
-      <View style={styles.greenHeader_more}>
+      <TouchableOpacity
+        onPress={toggleList}
+        activeOpacity={0.6}
+        style={styles.greenHeader_more}
+      >
         <Text style={styles.greenText_more}>Статьи</Text>
         <View style={styles.greenDecor_more}></View>
-        <TouchableOpacity onPress={toggleList}>
+        <View>
           <Text style={styles.greenText_more_end}>
             {expanded ? "Скрыть" : "Открыть"}
           </Text>
-        </TouchableOpacity>
-      </View>
+        </View>
+      </TouchableOpacity>
       <Animated.View style={{ height: height, overflow: "hidden" }}>
         {articles ? (
           articles.length < 1 ? (
@@ -88,7 +92,7 @@ const FavoriteArticles = ({ navigation, setArticlesCount }) => {
         ) : null}
       </Animated.View>
     </>
-  );
+  ) : null;
 };
 
 export default FavoriteArticles;

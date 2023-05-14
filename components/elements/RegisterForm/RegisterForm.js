@@ -47,9 +47,9 @@ const RegisterForm = ({ navigation, setGlobalLoad }) => {
     }
   };
 
-  useEffect(() => {
-    setGlobalLoad(isLoad);
-  }, [isLoad]);
+  // useEffect(() => {
+  //   setGlobalLoad(isLoad);
+  // }, [isLoad]);
 
   const sumbitRegister = () => {
     setErrorList([]);
@@ -57,7 +57,11 @@ const RegisterForm = ({ navigation, setGlobalLoad }) => {
 
     setLoad(true);
     dispatch(
-      register({ email: email, password: password }, setLoad, setErrorList)
+      register(
+        { email: email.toLowerCase(), password: password },
+        setLoad,
+        setErrorList
+      )
     );
   };
 
@@ -83,12 +87,17 @@ const RegisterForm = ({ navigation, setGlobalLoad }) => {
               editable={!isLoad}
               value={email}
               placeholder={"Электронная почта"}
-              onChangeText={(text) => setEmail(text.toLowerCase())}
+              onChangeText={(text) => setEmail(text)}
             />
           </View>
           <View>
             <CustomButton disactive={!email} onClick={setNextStep}>
-              <Text style={{ color: !email ? "#43464A" : "#121212" }}>
+              <Text
+                style={{
+                  color: !email ? "#43464A" : "#121212",
+                  fontFamily: "Geometria-Bold",
+                }}
+              >
                 Далее
               </Text>
             </CustomButton>

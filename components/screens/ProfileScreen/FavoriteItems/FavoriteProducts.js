@@ -58,17 +58,21 @@ const FavoriteProducts = ({ navigation, setProductsCount }) => {
     ],
   });
 
-  return (
+  return likedProducts && likedProducts.length > 0 ? (
     <>
-      <View style={styles.whiteHeader_more}>
+      <TouchableOpacity
+        onPress={toggleList}
+        activeOpacity={0.6}
+        style={styles.whiteHeader_more}
+      >
         <Text style={styles.whiteText_more}>Товары</Text>
         <View style={styles.whiteDecor_more}></View>
-        <TouchableOpacity onPress={toggleList}>
+        <View>
           <Text style={styles.whiteText_more_end}>
             {expanded ? "Скрыть" : "Открыть"}
           </Text>
-        </TouchableOpacity>
-      </View>
+        </View>
+      </TouchableOpacity>
       <Animated.View style={{ height: height, overflow: "hidden" }}>
         {likedProducts ? (
           likedProducts.length < 1 ? (
@@ -137,7 +141,7 @@ const FavoriteProducts = ({ navigation, setProductsCount }) => {
         ) : null}
       </Animated.View>
     </>
-  );
+  ) : null;
 };
 
 export default FavoriteProducts;

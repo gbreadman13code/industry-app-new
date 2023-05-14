@@ -113,15 +113,18 @@ const ProfileScreen = ({ navigation }) => {
 
           <AllOrders navigation={navigation} />
 
-          <View style={styles.yellowHeader_more}>
-            <Text style={styles.yellowText_more}>Вам понравилось</Text>
-            <View style={styles.yellowDecor_more}></View>
-            <TouchableOpacity activeOpacity={1}>
-              <Text style={styles.yellowText_more_end}>
-                {productsCount + videosCount + podcastsCount + articlesCount}
-              </Text>
-            </TouchableOpacity>
-          </View>
+          {productsCount + videosCount + podcastsCount + articlesCount > 0 && (
+            <View style={styles.yellowHeader_more}>
+              <Text style={styles.yellowText_more}>Вам понравилось</Text>
+              <View style={styles.yellowDecor_more}></View>
+
+              <TouchableOpacity activeOpacity={1}>
+                <Text style={styles.yellowText_more_end}>
+                  {productsCount + videosCount + podcastsCount + articlesCount}
+                </Text>
+              </TouchableOpacity>
+            </View>
+          )}
 
           <FavoriteProducts
             navigation={navigation}
@@ -159,7 +162,8 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontFamily: "Geometria-Bold",
     textAlign: "center",
-    fontSize: 16,
+    marginTop: 12,
+    fontSize: 20,
     marginBottom: 15,
   },
   shopHeader: {

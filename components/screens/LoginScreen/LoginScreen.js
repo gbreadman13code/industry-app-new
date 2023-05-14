@@ -8,6 +8,9 @@ import {
   ScrollView,
   KeyboardAvoidingView,
   ImageBackground,
+  useWindowDimensions,
+  Keyboard,
+  Platform,
 } from "react-native";
 import { StatusBar } from "react-native";
 import React, { useEffect, useState } from "react";
@@ -31,6 +34,7 @@ const LoginScreen = () => {
   const [logoIcon, setLogoIcon] = useState(null);
   const [isLogining, setLogining] = useState(false);
   const [isLoad, setIsLoad] = useState(true);
+  const [keyboardHeight, setKeyboardHeight] = useState(0);
 
   const [isAuth, setAuth] = useState(false);
   const [hasPersonalInfo, setPersonalInfo] = useState();
@@ -45,7 +49,19 @@ const LoginScreen = () => {
     setAuth(auth);
   }, [auth]);
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    const showSubscription = Keyboard.addListener("keyboardDidShow", (e) => {
+      setKeyboardHeight(e.endCoordinates.height);
+    });
+    const hideSubscription = Keyboard.addListener("keyboardDidHide", () => {
+      setKeyboardHeight(0);
+    });
+
+    return () => {
+      showSubscription.remove();
+      hideSubscription.remove();
+    };
+  }, []);
 
   useEffect(() => {
     if (!auth) {
@@ -53,10 +69,6 @@ const LoginScreen = () => {
     }
     dispatch(getUserData(setIsLoad));
   }, [dispatch, auth]);
-
-  useEffect(() => {
-    console.log(isLoad);
-  }, [isLoad]);
 
   useEffect(() => {
     if (!personalInfo.id) return;
@@ -71,14 +83,24 @@ const LoginScreen = () => {
     setLogoIcon(logo);
   }, []);
 
+  const { height } = useWindowDimensions();
+
   return (
     <>
       <StatusBar barStyle="light-content" />
-      <SafeAreaView style={styles.container}>
+      <SafeAreaView
+        style={[
+          styles.container,
+          {
+            height: height - keyboardHeight,
+          },
+        ]}
+      >
         <ScrollView
           contentContainerStyle={{
-            flex: 1,
-            justifyContent: "center",
+            // flex: 1,
+            justifyContent: keyboardHeight == 0 ? null : "center",
+            paddingTop: keyboardHeight === 0 ? height / 4 : 0,
             backgroundColor: "#000",
           }}
         >
@@ -157,20 +179,20 @@ const LoginScreen = () => {
                       </Text>
                     </TouchableOpacity>
                   </View>
-                  <KeyboardAvoidingView
-                    keyboardVerticalOffset={100}
+                  {/* <KeyboardAvoidingView
+                    keyboardVerticalOffset={0}
                     behavior={Platform.OS === "ios" ? "padding" : "height"}
-                  >
-                    {!isLogining ? (
-                      <View>
-                        <RegisterForm setGlobalLoad={setIsLoad} />
-                      </View>
-                    ) : (
-                      <View>
-                        <LoginForm setGlobalLoad={setIsLoad} />
-                      </View>
-                    )}
-                  </KeyboardAvoidingView>
+                  > */}
+                  {!isLogining ? (
+                    <View>
+                      <RegisterForm setGlobalLoad={setIsLoad} />
+                    </View>
+                  ) : (
+                    <View>
+                      <LoginForm setGlobalLoad={setIsLoad} />
+                    </View>
+                  )}
+                  {/* </KeyboardAvoidingView> */}
                 </>
               ) : (
                 <PersonalDataForm />
@@ -189,8 +211,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
-    justifyContent: "center",
+    // justifyContent: "center",
     backgroundColor: "#000",
+    height: "100%",
     // color: "#fff",
   },
   actionItem_wrapper: {

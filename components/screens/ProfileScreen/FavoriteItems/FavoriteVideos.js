@@ -73,17 +73,21 @@ const FavoriteVideos = ({ setVideosCount }) => {
       return async () => {};
     }, [])
   );
-  return (
+  return videos && videos.length > 0 ? (
     <>
-      <View style={styles.purpleHeader_more}>
+      <TouchableOpacity
+        onPress={toggleList}
+        activeOpacity={0.6}
+        style={styles.purpleHeader_more}
+      >
         <Text style={styles.purpleText_more}>Видео</Text>
         <View style={styles.purpleDecor_more}></View>
-        <TouchableOpacity onPress={toggleList}>
+        <View>
           <Text style={styles.purpleText_more_end}>
             {expanded ? "Скрыть" : "Открыть"}
           </Text>
-        </TouchableOpacity>
-      </View>
+        </View>
+      </TouchableOpacity>
       <Animated.View style={{ height: height, overflow: "hidden" }}>
         {videos ? (
           videos.length < 1 ? (
@@ -109,7 +113,7 @@ const FavoriteVideos = ({ setVideosCount }) => {
         ) : null}
       </Animated.View>
     </>
-  );
+  ) : null;
 };
 
 export default FavoriteVideos;

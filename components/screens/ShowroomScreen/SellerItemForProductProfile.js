@@ -4,7 +4,7 @@ import { ImageBackground } from "react-native";
 
 const SellerItemForProductProfile = ({ url, title, address, id, navigate }) => {
   return (
-    <View style={styles.item}>
+    <TouchableOpacity style={styles.item} onPress={() => navigate(id)}>
       <View style={styles.shopView}>
         <ImageBackground
           style={styles.image}
@@ -16,13 +16,10 @@ const SellerItemForProductProfile = ({ url, title, address, id, navigate }) => {
           {/* <Text style={styles.type}>{type}</Text> */}
         </View>
       </View>
-      <TouchableOpacity
-        style={styles.moreInfoButton}
-        onPress={() => navigate(id)}
-      >
+      <View style={styles.moreInfoButton}>
         <Text style={styles.moreInfoText}>Подробнее</Text>
-      </TouchableOpacity>
-    </View>
+      </View>
+    </TouchableOpacity>
   );
 };
 
@@ -44,15 +41,20 @@ const styles = StyleSheet.create({
     alignItems: "center",
     flex: 3,
   },
+  shopInfo: {
+    flex: 3,
+    paddingLeft: 5,
+  },
   image: {
+    flex: 1,
     width: 64,
     height: 64,
     marginRight: 9,
   },
   title: {
     color: "#fff",
-    fontFamily: "Geometria-Bold",
-    fontSize: 18,
+    fontFamily: "Geometria-Regular",
+    fontSize: 16,
   },
   adress: {
     color: "#C7CBC9",
@@ -72,7 +74,7 @@ const styles = StyleSheet.create({
   },
   moreInfoText: {
     color: "#464A88",
-    fontSize: 16,
+    fontSize: 12,
     fontFamily: "Geometria-Regular",
     textAlign: "center",
   },

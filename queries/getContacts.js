@@ -13,6 +13,7 @@ export const getContacts = () => {
       },
       method: "GET",
     });
+
     const data = await response.json();
     dispatch(setContactsAction(data));
   };

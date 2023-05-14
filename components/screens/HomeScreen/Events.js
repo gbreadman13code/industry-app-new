@@ -29,11 +29,6 @@ const Events = ({ navigation }) => {
 
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    if (!events) return;
-    // console.log(events[0]);
-  }, [events]);
-
   useFocusEffect(
     useCallback(() => {
       dispatch(getEvents());
@@ -85,6 +80,7 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontFamily: "Geometria-Bold",
     textAlign: "center",
-    fontSize: 16,
+    fontSize: 20,
+    marginTop: 12,
   },
 });

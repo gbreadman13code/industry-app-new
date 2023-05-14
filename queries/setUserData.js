@@ -28,7 +28,11 @@ export const setUserData = (data, setLoad, setErrorList) => {
       const arrayOfErrors = [];
       for (let errorType in responseData) {
         for (let i = 0; i < responseData[errorType].length; i++) {
-          arrayOfErrors.push(responseData[errorType][i]);
+          if (responseData[errorType][i].includes("date")) {
+            arrayOfErrors.push("Пожалуйста, укажите дату в формате ДД.ММ.ГГГГ");
+          } else {
+            arrayOfErrors.push(responseData[errorType][i]);
+          }
         }
       }
       setErrorList((prevState) => prevState.concat(arrayOfErrors));

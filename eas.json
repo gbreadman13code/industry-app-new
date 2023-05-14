@@ -4,31 +4,20 @@
   },
 
   "build": {
-    "development": {
-      "developmentClient": false,
-      "ios": {
-        "resourceClass": "m-medium"
-      },
+    "preview": {
+      "android": {
+        "buildType": "apk",
+        "distribution": "internal"
+      }
+    },
+    "preview2": {
       "android": {
         "gradleCommand": ":app:assembleRelease"
       }
     },
-    "preview": {
-      "ios": {
-        "resourceClass": "m-medium"
-      },
-      "developmentClient": true,
-      "android": {
-        "buildType": "apk"
-      }
+    "preview3": {
+      "developmentClient": true
     },
-    "production": {
-      "ios": {
-        "resourceClass": "m-medium"
-      }
-    }
-  },
-  "submit": {
     "production": {}
   }
 }
