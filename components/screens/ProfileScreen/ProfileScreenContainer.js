@@ -22,6 +22,7 @@ import CustomButton from "../../elements/CustomButton/CustomButton";
 import { useDispatch } from "react-redux";
 import { clearBascketAction } from "../../../redux/reducers/BascketReducer";
 import LastOrdersScreen from "./OrderScreens/LastOrdersScreen";
+import SellerProfile from "../ShowroomScreen/SellerProfile";
 
 const ProfileScreenContainer = ({ navigation }) => {
   const [isShowSuccessPage, setShowSuccessPage] = useState(false);
@@ -60,6 +61,7 @@ const ProfileScreenContainer = ({ navigation }) => {
         <Stack.Screen name="PayAndDelivery" component={PayAndDeliveryPage} />
 
         <Stack.Screen name="Partner" component={PartnerProfile} />
+        <Stack.Screen name="Seller" component={SellerProfile} />
         <Stack.Screen name="Product" component={ProductProfile} />
         <Stack.Screen name="ArticleProfile" component={ArticleProfile} />
 

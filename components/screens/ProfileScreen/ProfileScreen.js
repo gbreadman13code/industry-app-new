@@ -67,7 +67,7 @@ const ProfileScreen = ({ navigation }) => {
               </TouchableOpacity>
               <View
                 style={{
-                  left: width / 2 - 52,
+                  left: 0,
                   top: -42,
                   position: "absolute",
                   width: 72,
@@ -192,7 +192,7 @@ const styles = StyleSheet.create({
     // alignSelf: "flex-end",
     width: "100%",
     position: "relative",
-    justifyContent: "space-between",
+    justifyContent: "flex-end",
     flexDirection: "row",
     alignItems: "center",
   },

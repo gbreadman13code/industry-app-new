@@ -1,4 +1,11 @@
-import { SafeAreaView, StyleSheet, Text, View, Linking } from "react-native";
+import {
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  View,
+  Linking,
+  ScrollView,
+} from "react-native";
 import React, { useEffect, useState } from "react";
 import { TouchableOpacity } from "react-native";
 import ArrowBack from "../../../../assets/svg/ArrowBack";
@@ -67,208 +74,210 @@ const ContactPage = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.wrapper}>
-        <View
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "center",
-            position: "relative",
-            marginBottom: 25,
-          }}
-        >
-          <View style={{ position: "absolute", left: 0 }}>
-            <BackButton navigate={() => navigation.goBack()} />
+        <ScrollView>
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "center",
+              position: "relative",
+              marginBottom: 25,
+            }}
+          >
+            <View style={{ position: "absolute", left: 0 }}>
+              <BackButton navigate={() => navigation.goBack()} />
+            </View>
+            <Text style={styles.header}>Контакты</Text>
           </View>
-          <Text style={styles.header}>Контакты</Text>
-        </View>
-        <View style={styles.yellowHeader}></View>
-        <View style={{ marginTop: 16 }}>
-          {contacts && (
-            <>
-              {contacts.addresses.length > 0 && (
-                <View style={styles.contactItem}>
-                  <Text style={styles.title}>Мы находимся</Text>
-                  <View style={styles.contactContent}>
-                    <View style={{ marginRight: 20 }}>
-                      <LocationGreen />
-                    </View>
-                    {contacts.addresses.map((item, index) => (
-                      <Text key={index} style={styles.contactContentText}>
-                        {item.text}
-                      </Text>
-                    ))}
-                  </View>
-                </View>
-              )}
-              {contacts.phones.length > 0 && (
-                <View style={styles.contactItem}>
-                  <Text style={styles.title}>Позвонить нам</Text>
-                  <View style={styles.contactContent}>
-                    <View style={{ marginRight: 20 }}>
-                      <PhoneGreen />
-                    </View>
-                    {contacts.phones.map((item, index) => (
-                      <Text
-                        key={index}
-                        style={styles.contactContentText}
-                        onPress={() => linkToCall(item.text)}
-                      >
-                        {item.text}
-                      </Text>
-                    ))}
-                  </View>
-                </View>
-              )}
-              {contacts.emails.length > 0 && (
-                <View style={styles.contactItem}>
-                  <Text style={styles.title}>Написать нам</Text>
-                  <View style={styles.contactContent}>
-                    <View style={{ marginRight: 20 }}>
-                      <MailGreen />
-                    </View>
-                    {contacts.emails.map((item, index) => (
-                      <Text
-                        key={index}
-                        style={styles.contactContentText}
-                        onPress={() => linkToMail(item.text)}
-                      >
-                        {item.text}
-                      </Text>
-                    ))}
-                  </View>
-                </View>
-              )}
-              {contacts.sites.length > 0 && (
-                <View style={styles.contactItem}>
-                  <Text style={styles.title}>
-                    {contacts.sites.length > 1 ? "Наши сайты" : "Наш сайт"}
-                  </Text>
-                  <View style={styles.contactContent}>
-                    <View style={{ marginRight: 20 }}>
-                      <WebSiteGreen />
-                    </View>
-                    {contacts.sites.map((item, index) => (
-                      <Text
-                        key={index}
-                        style={styles.contactContentText}
-                        onPress={() => linkToSite(item.link)}
-                      >
-                        {item.text}
-                      </Text>
-                    ))}
-                  </View>
-                </View>
-              )}
-              {contacts.socials && (
-                <View style={styles.contactItem}>
-                  <Text style={styles.title}>Мы в соцсетях</Text>
-                  {contacts.socials.vk.length > 0 && (
+          <View style={styles.yellowHeader}></View>
+          <View style={{ marginTop: 16 }}>
+            {contacts && (
+              <>
+                {contacts.addresses.length > 0 && (
+                  <View style={styles.contactItem}>
+                    <Text style={styles.title}>Мы находимся</Text>
                     <View style={styles.contactContent}>
                       <View style={{ marginRight: 20 }}>
-                        <VkSvg />
+                        <LocationGreen />
                       </View>
-                      {contacts.socials.vk.map((subItem, subindex) => (
-                        <Text
-                          key={subindex}
-                          style={styles.contactContentText}
-                          onPress={() => linkToSocial(subItem.link)}
-                        >
-                          {subItem.text}
+                      {contacts.addresses.map((item, index) => (
+                        <Text key={index} style={styles.contactContentText}>
+                          {item.text}
                         </Text>
                       ))}
                     </View>
-                  )}
-                  {contacts.socials.tg.length > 0 && (
-                    <View style={[styles.contactContent, { marginTop: 10 }]}>
+                  </View>
+                )}
+                {contacts.phones.length > 0 && (
+                  <View style={styles.contactItem}>
+                    <Text style={styles.title}>Позвонить нам</Text>
+                    <View style={styles.contactContent}>
                       <View style={{ marginRight: 20 }}>
-                        <TgSvg />
+                        <PhoneGreen />
                       </View>
-                      {contacts.socials.tg.map((subItem, subindex) => (
+                      {contacts.phones.map((item, index) => (
                         <Text
-                          key={subindex}
+                          key={index}
                           style={styles.contactContentText}
-                          onPress={() => linkToSocial(subItem.link)}
+                          onPress={() => linkToCall(item.text)}
                         >
-                          {subItem.text}
+                          {item.text}
                         </Text>
                       ))}
+                    </View>
+                  </View>
+                )}
+                {contacts.emails.length > 0 && (
+                  <View style={styles.contactItem}>
+                    <Text style={styles.title}>Написать нам</Text>
+                    <View style={styles.contactContent}>
+                      <View style={{ marginRight: 20 }}>
+                        <MailGreen />
+                      </View>
+                      {contacts.emails.map((item, index) => (
+                        <Text
+                          key={index}
+                          style={styles.contactContentText}
+                          onPress={() => linkToMail(item.text)}
+                        >
+                          {item.text}
+                        </Text>
+                      ))}
+                    </View>
+                  </View>
+                )}
+                {contacts.sites.length > 0 && (
+                  <View style={styles.contactItem}>
+                    <Text style={styles.title}>
+                      {contacts.sites.length > 1 ? "Наши сайты" : "Наш сайт"}
+                    </Text>
+                    <View style={styles.contactContent}>
+                      <View style={{ marginRight: 20 }}>
+                        <WebSiteGreen />
+                      </View>
+                      {contacts.sites.map((item, index) => (
+                        <Text
+                          key={index}
+                          style={styles.contactContentText}
+                          onPress={() => linkToSite(item.link)}
+                        >
+                          {item.text}
+                        </Text>
+                      ))}
+                    </View>
+                  </View>
+                )}
+                {contacts.socials && (
+                  <View style={styles.contactItem}>
+                    <Text style={styles.title}>Мы в соцсетях</Text>
+                    {contacts.socials.vk.length > 0 && (
+                      <View style={styles.contactContent}>
+                        <View style={{ marginRight: 20 }}>
+                          <VkSvg />
+                        </View>
+                        {contacts.socials.vk.map((subItem, subindex) => (
+                          <Text
+                            key={subindex}
+                            style={styles.contactContentText}
+                            onPress={() => linkToSocial(subItem.link)}
+                          >
+                            {subItem.text}
+                          </Text>
+                        ))}
+                      </View>
+                    )}
+                    {contacts.socials.tg.length > 0 && (
+                      <View style={[styles.contactContent, { marginTop: 10 }]}>
+                        <View style={{ marginRight: 20 }}>
+                          <TgSvg />
+                        </View>
+                        {contacts.socials.tg.map((subItem, subindex) => (
+                          <Text
+                            key={subindex}
+                            style={styles.contactContentText}
+                            onPress={() => linkToSocial(subItem.link)}
+                          >
+                            {subItem.text}
+                          </Text>
+                        ))}
+                      </View>
+                    )}
+                  </View>
+                )}
+                <View style={styles.contactItem}>
+                  {contacts.user_agreement && (
+                    <TouchableOpacity
+                      onPress={() => linkToDoc(contacts.user_agreement)}
+                      style={[styles.contactContent, { marginBottom: 20 }]}
+                    >
+                      <View style={{ marginRight: 20 }}>
+                        <AgreementLinePink />
+                      </View>
+                      <Text style={styles.contactContentText}>
+                        Пользовательское соглашение
+                      </Text>
+                    </TouchableOpacity>
+                  )}
+                  {contacts.confidential_policy && (
+                    <TouchableOpacity
+                      onPress={() => linkToDoc(contacts.confidential_policy)}
+                      style={[styles.contactContent, { marginBottom: 20 }]}
+                    >
+                      <View style={{ marginRight: 20 }}>
+                        <AgreementLinePink />
+                      </View>
+                      <Text style={styles.contactContentText}>
+                        Политика конфиденциальности
+                      </Text>
+                    </TouchableOpacity>
+                  )}
+                  {contacts.ogrn && (
+                    <View style={[styles.contactContent, { marginBottom: 10 }]}>
+                      <View>
+                        <Text
+                          style={{
+                            fontFamily: "Geometria-Bold",
+                            fontSize: 16,
+                            color: "#fff",
+                          }}
+                        >
+                          ОГРН:{" "}
+                        </Text>
+                      </View>
+                      <Text style={styles.contactContentText}>
+                        {contacts.ogrn}
+                      </Text>
+                    </View>
+                  )}
+                  {contacts.inn && (
+                    <View style={styles.contactContent}>
+                      <View>
+                        <Text
+                          style={{
+                            fontFamily: "Geometria-Bold",
+                            fontSize: 16,
+                            color: "#fff",
+                          }}
+                        >
+                          ИНН:{" "}
+                        </Text>
+                      </View>
+                      <Text style={styles.contactContentText}>
+                        {contacts.inn}
+                      </Text>
                     </View>
                   )}
                 </View>
-              )}
-              <View style={styles.contactItem}>
-                {contacts.user_agreement && (
-                  <TouchableOpacity
-                    onPress={() => linkToDoc(contacts.user_agreement)}
-                    style={[styles.contactContent, { marginBottom: 20 }]}
-                  >
-                    <View style={{ marginRight: 20 }}>
-                      <AgreementLinePink />
-                    </View>
-                    <Text style={styles.contactContentText}>
-                      Пользовательское соглашение
-                    </Text>
-                  </TouchableOpacity>
-                )}
-                {contacts.confidential_policy && (
-                  <TouchableOpacity
-                    onPress={() => linkToDoc(contacts.confidential_policy)}
-                    style={[styles.contactContent, { marginBottom: 20 }]}
-                  >
-                    <View style={{ marginRight: 20 }}>
-                      <AgreementLinePink />
-                    </View>
-                    <Text style={styles.contactContentText}>
-                      Политика конфиденциальности
-                    </Text>
-                  </TouchableOpacity>
-                )}
-                {contacts.ogrn && (
-                  <View style={[styles.contactContent, { marginBottom: 10 }]}>
-                    <View>
-                      <Text
-                        style={{
-                          fontFamily: "Geometria-Bold",
-                          fontSize: 16,
-                          color: "#fff",
-                        }}
-                      >
-                        ОГРН:{" "}
-                      </Text>
-                    </View>
-                    <Text style={styles.contactContentText}>
-                      {contacts.ogrn}
-                    </Text>
-                  </View>
-                )}
-                {contacts.inn && (
-                  <View style={styles.contactContent}>
-                    <View>
-                      <Text
-                        style={{
-                          fontFamily: "Geometria-Bold",
-                          fontSize: 16,
-                          color: "#fff",
-                        }}
-                      >
-                        ИНН:{" "}
-                      </Text>
-                    </View>
-                    <Text style={styles.contactContentText}>
-                      {contacts.inn}
-                    </Text>
-                  </View>
-                )}
-              </View>
-            </>
-          )}
-          {/* <View style={styles.contactItem}>
+              </>
+            )}
+            {/* <View style={styles.contactItem}>
             <Text style={styles.title}></Text>
             <View style={styles.contactContent}>
               <View></View>
             </View>
           </View> */}
-        </View>
+          </View>
+        </ScrollView>
       </View>
     </SafeAreaView>
   );

@@ -9,7 +9,7 @@ import {
   setPlayVideoAction,
 } from "../../../redux/reducers/VideoInstanceReducer";
 
-import { Video } from "expo-av";
+import { Audio, Video } from "expo-av";
 import { setViews } from "../../../queries/setViews";
 
 import { useFocusEffect } from "@react-navigation/native";
@@ -55,6 +55,13 @@ const VideoList = () => {
     setViews(item.id);
     await videoRef.current.loadAsync({ uri: item.file });
     dispatch(setCurrentVideoAction({ video: videoRef.current, item: item }));
+    await Audio.setAudioModeAsync({
+      allowsRecordingIOS: false,
+      playsInSilentModeIOS: true,
+      staysActiveInBackground: true,
+      allowsExternalPlayback: true,
+    });
+
     await videoRef.current.playAsync();
   };
 

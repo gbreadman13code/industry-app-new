@@ -23,7 +23,11 @@ import React, {
 } from "react";
 import BackButton from "../../elements/BackButton/BackButton";
 import { useNavigationState } from "@react-navigation/native";
-import { getSellerById } from "../../../queries/getSellerById";
+import {
+  getSellerById,
+  setSellerLike,
+  setSellerUnlike,
+} from "../../../queries/getSellerById";
 import { useDispatch, useSelector } from "react-redux";
 import { setSellerAction } from "../../../redux/reducers/SellerReducer";
 import ShareSvg from "../../../assets/svg/ShateSvg";
@@ -77,7 +81,7 @@ const SellerProfile = ({ navigation }) => {
   }, [shopRedux]);
 
   const navigateToProfile = (id) => {
-    navigation.navigate("Product", { id: id });
+    id ? navigation.navigate("Product", { id: id }) : navigation.goBack();
   };
 
   // ref
@@ -94,6 +98,14 @@ const SellerProfile = ({ navigation }) => {
   const handleCloseModal = () => {
     bottomSheetModalRef.current?.dismiss();
     setModalShowing(false);
+  };
+
+  const likeOrUnlike = () => {
+    if (shop.is_liked) {
+      dispatch(setSellerUnlike(shop.id, setLoad));
+    } else {
+      dispatch(setSellerLike(shop.id, setLoad));
+    }
   };
 
   return (
@@ -134,9 +146,12 @@ const SellerProfile = ({ navigation }) => {
                       }}
                       source={{ uri: shop.cropped_image }}
                     />
-                    <TouchableOpacity style={styles.subscribeButton}>
+                    <TouchableOpacity
+                      style={styles.subscribeButton}
+                      onPress={likeOrUnlike}
+                    >
                       <Text style={styles.subscribeButtonText}>
-                        Подписаться
+                        {shop.is_liked ? "Отписаться" : "Подписаться"}
                       </Text>
                     </TouchableOpacity>
                     <TouchableOpacity

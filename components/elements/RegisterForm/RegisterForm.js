@@ -1,8 +1,14 @@
-import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  Linking,
+} from "react-native";
 import React, { useEffect, useState } from "react";
 import CustomTextInput from "../CustomTextInput/CustomTextInput";
 import CustomButton from "../CustomButton/CustomButton";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { register } from "../../../queries/register";
 import Lottie from "lottie-react-native";
 
@@ -11,6 +17,7 @@ import ChoosePushScreen from "../../screens/ChoosePushScreen/ChoosePushScreen";
 
 import ArrowIcon from "../../../assets/img/icons/arrow_left.svg";
 import MainScreen from "../../screens/MainScreen/MainScreen";
+import { getContacts } from "../../../queries/getContacts";
 
 const RegisterForm = ({ navigation, setGlobalLoad }) => {
   const [firstStep, setFirstStep] = useState(true);
@@ -21,8 +28,26 @@ const RegisterForm = ({ navigation, setGlobalLoad }) => {
   const [isPassworSuccess, setPasswordSuccess] = useState(false);
   const [isLoad, setLoad] = useState(false);
   const [isReadyToNavigate, setReadyToNavigate] = useState(false);
+  const [confidencial, setConfidencial] = useState();
+  const [agreements, setAgreements] = useState();
 
   const dispatch = useDispatch();
+
+  const contactsRedux = useSelector((state) => state.contacts.contacts);
+
+  useEffect(() => {
+    if (!contactsRedux) return;
+    setConfidencial(contactsRedux.confidential_policy);
+    setAgreements(contactsRedux.user_agreement);
+  }, [contactsRedux]);
+
+  useEffect(() => {
+    dispatch(getContacts());
+  }, [dispatch]);
+
+  const handlePress = (mailTo) => {
+    Linking.openURL(mailTo);
+  };
 
   const goBack = () => {
     setFirstStep(true);
@@ -82,7 +107,7 @@ const RegisterForm = ({ navigation, setGlobalLoad }) => {
     <View>
       {firstStep ? (
         <>
-          <View style={{ marginTop: 48, marginBottom: 24 }}>
+          <View style={{ marginTop: 48, marginBottom: 24, maxWidth: "100%" }}>
             <CustomTextInput
               editable={!isLoad}
               value={email}
@@ -144,6 +169,52 @@ const RegisterForm = ({ navigation, setGlobalLoad }) => {
               </Text>
             )}
           </View>
+
+          {confidencial && agreements && (
+            <View
+              style={{
+                flexDirection: "row",
+                flexWrap: "wrap",
+                marginBottom: 26,
+                justifyContent: "center",
+              }}
+            >
+              <Text
+                style={styles.agreementText}
+                onPress={() => console.log("pressed")}
+              >
+                Регистрируясь, вы принимаете
+              </Text>
+              <Text
+                style={[
+                  styles.agreementText,
+                  {
+                    textDecorationColor: "#fff",
+                    // textDecorationStyle: "solid",
+                    textDecorationLine: "underline",
+                  },
+                ]}
+                onPress={() => handlePress(confidencial)}
+              >
+                {" "}
+                Политику конфиденциальности
+              </Text>
+              <Text style={styles.agreementText}> и </Text>
+              <Text
+                style={[
+                  styles.agreementText,
+                  {
+                    textDecorationColor: "#fff",
+                    // textDecorationStyle: "solid",
+                    textDecorationLine: "underline",
+                  },
+                ]}
+                onPress={() => handlePress(agreements)}
+              >
+                Пользовательское соглашение
+              </Text>
+            </View>
+          )}
           <View>
             <CustomButton
               disactive={!isPassworSuccess}
@@ -183,5 +254,11 @@ const styles = StyleSheet.create({
     color: "#E7E453",
     fontFamily: "Geometria-Bold",
     alignSelf: "center",
+  },
+  agreementText: {
+    color: "#fff",
+    fontSize: 10,
+    fontFamily: "Geometria-Regular",
+    lineHeight: 12,
   },
 });

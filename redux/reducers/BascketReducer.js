@@ -41,7 +41,7 @@ export const BascketReducer = (state = initialState, action) => {
         basketArray: state.basketArray.map((item) =>
           item.id === action.payload
             ? { ...item, localCount: item.localCount - 1 }
-            : null
+            : item
         ),
       };
     case CLEAR_BASCKET:

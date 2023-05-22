@@ -159,7 +159,7 @@ const PartnerProfile = ({ navigation }) => {
                   </TouchableOpacity>
                   <ImageBackground
                     style={{
-                      left: width / 2 - 52,
+                      left: 0,
                       top: -42,
                       position: "absolute",
                       width: 72,
@@ -171,7 +171,10 @@ const PartnerProfile = ({ navigation }) => {
                     source={{ uri: partner.cropped_image }}
                   />
                   <View
-                    style={{ flexDirection: "column", alignItems: "flex-end" }}
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                    }}
                   >
                     <TouchableOpacity
                       style={styles.subscribeButton}
@@ -465,7 +468,7 @@ const styles = StyleSheet.create({
     // alignSelf: "flex-end",
     width: "100%",
     position: "relative",
-    justifyContent: "space-between",
+    justifyContent: "flex-end",
     flexDirection: "row",
     alignItems: "flex-start",
   },
@@ -487,7 +490,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#464A88",
     padding: 5,
-    marginBottom: 10,
+    // marginBottom: 10,
   },
   subscribeButtonText: {
     color: "#fff",
@@ -497,6 +500,7 @@ const styles = StyleSheet.create({
   subscribeButtonFAQ: {
     width: 20,
     height: 19,
+    marginLeft: 5,
   },
   subscribeButtonFAQText: {
     color: "#C7CBC9",

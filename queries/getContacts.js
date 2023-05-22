@@ -7,10 +7,10 @@ export const getContacts = () => {
   return async (dispatch) => {
     const token = await SecureStore.getItemAsync("token");
     const response = await fetch(BASE_URL + "contacts/contacts/", {
-      headers: {
-        Authorization: "Token " + token,
-        "Content-Type": "application/json;charset=utf-8",
-      },
+      // headers: {
+      //   Authorization: "Token " + token,
+      //   "Content-Type": "application/json;charset=utf-8",
+      // },
       method: "GET",
     });
 

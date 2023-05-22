@@ -1,16 +1,32 @@
 import { SafeAreaView, StyleSheet, Text, View, Linking } from "react-native";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { TouchableOpacity } from "react-native";
 import ArrowBack from "../../../../assets/svg/ArrowBack";
 import BackButton from "../../../elements/BackButton/BackButton";
 import { logout } from "../../../../queries/logout";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { getContacts } from "../../../../queries/getContacts";
+import { clearBascketAction } from "../../../../redux/reducers/BascketReducer";
 
 const SettingScreen = ({ navigation }) => {
+  const [mailTo, setMailTo] = useState();
+
+  const contactsRedux = useSelector((state) => state.contacts.contacts);
   const dispatch = useDispatch();
 
+  useEffect(() => {
+    if (!contactsRedux) return;
+    if (contactsRedux.emails.length > 0) {
+      setMailTo(contactsRedux.emails[0].text);
+    }
+  }, [contactsRedux]);
+
+  useEffect(() => {
+    dispatch(getContacts());
+  }, [dispatch]);
+
   const handlePress = () => {
-    Linking.openURL(`mailto:support@expo.io`);
+    Linking.openURL("mailto:" + mailTo);
   };
   return (
     <SafeAreaView style={styles.container}>
@@ -62,17 +78,24 @@ const SettingScreen = ({ navigation }) => {
             </TouchableOpacity>
           </View>
           <View style={{ marginBottom: 24 }}>
-            <TouchableOpacity style={{ marginBottom: 8 }} onPress={handlePress}>
-              <Text
-                style={{
-                  color: "#fff",
-                  fontSize: 14,
-                  fontFamily: "Geometria-Regular",
-                }}
+            {mailTo && (
+              <TouchableOpacity
+                style={{ marginBottom: 8 }}
+                onPress={handlePress}
               >
-                Связаться с нами
-              </Text>
-            </TouchableOpacity>
+                <Text
+                  style={{
+                    color: "#fff",
+                    fontSize: 14,
+                    fontFamily: "Geometria-Regular",
+                  }}
+                >
+                  Связаться с нами
+                </Text>
+              </TouchableOpacity>
+            )}
+          </View>
+          <View style={{ marginBottom: 24 }}>
             <TouchableOpacity
               style={{ marginBottom: 8 }}
               onPress={() => navigation.navigate("Contacts")}
@@ -107,7 +130,10 @@ const SettingScreen = ({ navigation }) => {
           <View style={{ marginBottom: 24 }}>
             <TouchableOpacity
               style={{ marginBottom: 8 }}
-              onPress={() => dispatch(logout())}
+              onPress={() => {
+                dispatch(logout());
+                dispatch(clearBascketAction());
+              }}
             >
               <Text
                 style={{

@@ -161,6 +161,12 @@ const AllMediaScreen = ({ navigation }) => {
     setViews(item.id);
     await videoRef.current.loadAsync({ uri: item.file });
     dispatch(setCurrentVideoAction({ video: videoRef.current, item: item }));
+    await Audio.setAudioModeAsync({
+      allowsRecordingIOS: false,
+      playsInSilentModeIOS: true,
+      staysActiveInBackground: true,
+      allowsExternalPlayback: true,
+    });
     await videoRef.current.playAsync();
   };
 

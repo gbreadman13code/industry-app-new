@@ -83,7 +83,7 @@ const LoginScreen = () => {
     setLogoIcon(logo);
   }, []);
 
-  const { height } = useWindowDimensions();
+  const { height, width } = useWindowDimensions();
 
   return (
     <>
@@ -102,6 +102,7 @@ const LoginScreen = () => {
             justifyContent: keyboardHeight == 0 ? null : "center",
             paddingTop: keyboardHeight === 0 ? height / 4 : 0,
             backgroundColor: "#000",
+            width: width * 0.8,
           }}
         >
           {isLoad ? (
@@ -126,7 +127,7 @@ const LoginScreen = () => {
             </View>
           ) : (
             <>
-              <View style={{ marginBottom: 40 }}>
+              <View style={{ marginBottom: 40, alignItems: "center" }}>
                 <RegisterLogo />
               </View>
               {!isAuth ? (

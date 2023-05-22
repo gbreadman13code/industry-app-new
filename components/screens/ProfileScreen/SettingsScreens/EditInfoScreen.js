@@ -93,7 +93,7 @@ const EditInfoScreen = ({ navigation }) => {
         {
           first_name: first_name,
           last_name: last_name,
-          birthday: birthday ? birthday.split(".").reverse().join("-") : "",
+          birthday: birthday ? birthday.split(".").reverse().join("-") : null,
           email: email,
           phone: phone,
         },
